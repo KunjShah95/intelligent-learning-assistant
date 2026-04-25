@@ -41,6 +41,6 @@
   "overrides": {
     "glob": "^10.3.0",
     "rimraf": "^5.0.0",
-    "node-domexception": "^4.0.0"
+    "node-domexception": "^2.0.0"
   }
 }
