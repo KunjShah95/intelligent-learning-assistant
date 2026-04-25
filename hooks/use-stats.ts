@@ -1,10 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import { getIdToken } from '@/lib/auth-client';
 
 interface UserStats {
   xp: number;
@@ -49,8 +44,8 @@ export function useStats(): UseStatsReturn {
   const fetchStats = useCallback(async () => {
     try {
       setLoading(true);
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.access_token) {
+      const token = await getIdToken();
+      if (!token) {
         setError('Not authenticated');
         setLoading(false);
         return;
@@ -58,7 +53,7 @@ export function useStats(): UseStatsReturn {
 
       const response = await fetch('/api/stats', {
         headers: {
-          Authorization: `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -79,8 +74,8 @@ export function useStats(): UseStatsReturn {
   const awardXp = useCallback(
     async (action: string, data: Record<string, unknown> = {}) => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session?.access_token) {
+        const token = await getIdToken();
+        if (!token) {
           return { success: false };
         }
 
@@ -88,7 +83,7 @@ export function useStats(): UseStatsReturn {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${session.access_token}`,
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ action, ...data }),
         });
