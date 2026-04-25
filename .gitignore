@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+
+# Next.js
+.next/
+out/
+build/
+dist/
+
+# Secrets - NEVER push these
+.env.local
+.env.production.local
+.env.*.local
+.env.development.local
+
+# Credentials (if using GCP service accounts)
+gcp-credentials.json
+service-account-key.json
+*.pem
