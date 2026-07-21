@@ -22,4 +22,6 @@ dist/
 # Credentials (if using GCP service accounts)
 gcp-credentials.json
 service-account-key.json
+*-firebase-adminsdk-*.json
+*serviceAccount*.json
 *.pem
