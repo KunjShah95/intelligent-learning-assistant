@@ -51,10 +51,16 @@ export default function DashboardPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-    if (res.ok) {
-      const { project } = await res.json();
-      setProjects(prev => [project, ...prev]);
+    if (!res.ok) {
+      const errData = await res.json().catch(() => null);
+      const detail =
+        res.status === 401
+          ? 'Not authorized — the server could not verify your session (check Firebase admin credentials).'
+          : errData?.error || `Request failed (${res.status})`;
+      throw new Error(detail);
     }
+    const { project } = await res.json();
+    setProjects(prev => [project, ...prev]);
   };
 
   return (

@@ -13,6 +13,7 @@ export function CreateProjectDialog({ open, onClose, onCreate }: CreateProjectDi
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   if (!open) return null;
 
@@ -20,11 +21,14 @@ export function CreateProjectDialog({ open, onClose, onCreate }: CreateProjectDi
     e.preventDefault();
     if (!name.trim()) return;
     setLoading(true);
+    setError(null);
     try {
       await onCreate({ name: name.trim(), description: description.trim() });
       setName('');
       setDescription('');
       onClose();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to create project');
     } finally {
       setLoading(false);
     }
@@ -40,6 +44,11 @@ export function CreateProjectDialog({ open, onClose, onCreate }: CreateProjectDi
           </button>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
+          {error && (
+            <div className="px-3 py-2 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg">
+              {error}
+            </div>
+          )}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
             <input
