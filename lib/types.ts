@@ -59,6 +59,7 @@ export interface AssessRequest {
   conceptId: string;
   answer: string;
   difficulty: string;
+  questionId?: string;
 }
 
 export interface AssessResponse {
@@ -66,6 +67,7 @@ export interface AssessResponse {
   explanation: string;
   nextDifficulty: 'easy' | 'medium' | 'hard';
   masteryChange: number;
+  correctAnswer: string;
 }
 
 export interface UserStats {
@@ -95,4 +97,45 @@ export interface XpEvent {
   xpAmount: number;
   metadata: Record<string, unknown>;
   createdAt: string;
+}
+
+export interface Project {
+  id: string;
+  name: string;
+  description: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Agent {
+  id: string;
+  projectId: string;
+  name: string;
+  description: string;
+  systemPrompt: string;
+  modelProvider: string;
+  modelName: string;
+  temperature: number;
+  maxTokens: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface ChatSession {
+  id: string;
+  title: string;
+  messages: ChatMessage[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface ProjectFile {
+  id: string;
+  fileName: string;
+  fileType: string;
+  fileSize: number;
+  openaiFileId?: string;
+  storagePath: string;
+  content?: string;
+  uploadedAt: Date;
 }

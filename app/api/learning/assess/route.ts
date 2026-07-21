@@ -3,20 +3,9 @@ import { verifyAuth } from '@/lib/auth';
 import { adminDb } from '@/lib/firebase-admin';
 import * as admin from 'firebase-admin';
 import type { AssessRequest, AssessResponse, QuizQuestion } from '@/lib/types';
+import { findQuestion } from '@/lib/quiz-questions';
 
 type Difficulty = QuizQuestion['difficulty'];
-
-const sampleQuestions: QuizQuestion[] = [
-  {
-    id: '1',
-    concept: 'algebra',
-    question: 'Solve for x: 2x + 5 = 13',
-    options: ['x = 4', 'x = 5', 'x = 6', 'x = 7'],
-    correctAnswer: 'x = 4',
-    difficulty: 'easy',
-    explanation: '2x + 5 = 13, subtract 5 from both sides: 2x = 8, divide by 2: x = 4',
-  },
-];
 
 function isDifficulty(value: unknown): value is Difficulty {
   return value === 'easy' || value === 'medium' || value === 'hard';
@@ -41,7 +30,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body: AssessRequest = await request.json();
-    const { conceptId, answer, difficulty } = body;
+    const { conceptId, answer, difficulty, questionId } = body;
 
     if (!conceptId || !answer || !difficulty) {
       return NextResponse.json(
@@ -54,7 +43,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid difficulty' }, { status: 400 });
     }
 
-    const question = sampleQuestions.find((item) => item.concept === conceptId);
+    const question = findQuestion({ id: questionId, concept: conceptId });
     if (!question) {
       return NextResponse.json({ error: 'Question not found' }, { status: 404 });
     }
@@ -115,6 +104,7 @@ export async function POST(request: NextRequest) {
       explanation: question.explanation,
       nextDifficulty: getNextDifficulty(difficulty, correct),
       masteryChange,
+      correctAnswer: question.correctAnswer,
     };
 
     return NextResponse.json(response);
