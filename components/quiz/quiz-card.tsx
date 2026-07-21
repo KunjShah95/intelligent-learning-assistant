@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import type { QuizQuestion } from '@/lib/types';
 
@@ -8,13 +7,34 @@ interface QuizCardProps {
   question: QuizQuestion;
   onAnswer: (answer: string) => void;
   isLoading?: boolean;
+  /** The answer the user selected, once submitted. */
+  selectedAnswer?: string | null;
+  /** The correct answer, revealed after the server responds. */
+  correctAnswer?: string | null;
 }
 
-export function QuizCard({ question, onAnswer, isLoading }: QuizCardProps) {
-  const [selected, setSelected] = useState<string | null>(null);
+export function QuizCard({
+  question,
+  onAnswer,
+  isLoading,
+  selectedAnswer,
+  correctAnswer,
+}: QuizCardProps) {
+  const answered = !!selectedAnswer;
+  const revealed = !!correctAnswer;
+
+  const getOptionStyle = (option: string) => {
+    if (revealed) {
+      if (option === correctAnswer) return 'border-green-500 bg-green-50 text-green-800';
+      if (option === selectedAnswer) return 'border-red-500 bg-red-50 text-red-800';
+      return 'border-gray-200 opacity-60';
+    }
+    if (option === selectedAnswer) return 'border-primary-600 bg-primary-50';
+    return 'border-gray-200 hover:border-gray-300';
+  };
 
   const handleSelect = (option: string) => {
-    setSelected(option);
+    if (answered || isLoading) return; // lock after first submit
     onAnswer(option);
   };
 
@@ -34,13 +54,12 @@ export function QuizCard({ question, onAnswer, isLoading }: QuizCardProps) {
           <button
             key={option}
             onClick={() => handleSelect(option)}
-            disabled={isLoading}
+            disabled={answered || isLoading}
             className={cn(
               'w-full text-left px-4 py-3 rounded-lg border transition',
-              selected === option
-                ? 'border-primary-600 bg-primary-50'
-                : 'border-gray-200 hover:border-gray-300',
-              isLoading && 'opacity-50 cursor-not-allowed'
+              getOptionStyle(option),
+              (answered || isLoading) && 'cursor-not-allowed',
+              isLoading && option === selectedAnswer && 'opacity-70 animate-pulse'
             )}
           >
             {option}
