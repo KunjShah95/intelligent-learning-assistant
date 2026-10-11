@@ -472,3 +472,11 @@ MIT License - see LICENSE file for details.
 - [Supabase](https://supabase.com/) - Database
 - [Vercel](https://vercel.com/) - Deployment
 - [AI SDK](https://sdk.vercel.ai/) - AI integration
+
+---
+
+## Case study
+
+The full write-up of LearnAI (problem, architecture, trade-offs and results) lives at **[kunjshah.in/projects/learnai](https://kunjshah.in/projects/learnai)**.
+
+Built by [Kunj Shah](https://kunjshah.in), AI engineer.
