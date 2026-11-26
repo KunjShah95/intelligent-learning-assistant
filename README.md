@@ -480,3 +480,8 @@ MIT License - see LICENSE file for details.
 The full write-up of LearnAI (problem, architecture, trade-offs and results) lives at **[kunjshah.in/projects/learnai](https://kunjshah.in/projects/learnai)**.
 
 Built by [Kunj Shah](https://kunjshah.in), AI engineer.
+
+---
+Built by [Kunj Shah](https://kunjshah.in), AI engineer in Ahmedabad.
+[See the shipped-project portfolio and 138+ merged PRs (67 public)](https://kunjshah.in/proof-of-work).
+Available for [fixed-scope AI agent projects](https://kunjshah.in/hire-ai-agent-developer).
